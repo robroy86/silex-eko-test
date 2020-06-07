@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>{% block title '' %} - My Silex Application</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link href="./css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="./web/css/main.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+    </head>
+    <body class="preview-page">
+        <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+            <header class="masthead mb-auto">
+                <div class="inner">
+                    {% include "navigation.html.twig" %}
+                </div>
+            </header>
+            <main role="main" class="inner cover">
+                {% block content %}
+                {% endblock %}
+            </main>
+            <footer class="mastfoot mt-auto">
+                <div class="inner">
+                    <p>Cover template for <a href="https://getbootstrap.com/">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+                </div>
+            </footer>
+        </div>
+        <link href="./web/js/jquery-3.4.1.slim.min.js" type="text/javascript" />
+        <link href="./web/js/poper.min.js" type="text/javascript" />
+        <link href="./web/js/bootstrap.min.js" type="text/javascript" />
+    </body>
+</html>

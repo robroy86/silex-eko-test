@@ -14,8 +14,22 @@ $app->get('/', function () use ($app) {
 ->bind('homepage')
 ;
 
+$app->get('/hello/{name}', function ($name) use ($app) {
+    return 'Hello '.$app->escape($name);
+});
+
+$app->get('/dodaj', function () use ($app) {
+    return $app['twig']->render('dodaj.html.twig', array());
+});
+
+$app->get('/admin', function () use ($app) {
+    return 'Hello ADMIN';
+});
+
+
 $app->error(function (\Exception $e, Request $request, $code) use ($app) {
     if ($app['debug']) {
+		echo "Pow Pow " . __FILE__;
         return;
     }
 
