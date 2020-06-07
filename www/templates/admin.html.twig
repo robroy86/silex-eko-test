@@ -1,0 +1,14 @@
+{% extends "layout.html.twig" %}
+{% block content %}
+    <h1>Lista propozycji przystanków:</h1>
+    <ul id="admin-przystanek-list" class="list-group">
+    {% for przystanek in przystanki %}
+        <li class="list-group-item{% if przystanek.reviewed == false %} active{% endif %}">{{ przystanek.id|e }} - {{ przystanek.nazwa|e }}</li>
+    {% endfor %}        
+        <li class="list-group-item active">Cras justo odio</li>
+        <li class="list-group-item">Dapibus ac facilisis in</li>
+        <li class="list-group-item">Morbi leo risus</li>
+        <li class="list-group-item">Porta ac consectetur ac</li>
+        <li class="list-group-item">Vestibulum at eros</li>
+    </ul>
+{% endblock %}

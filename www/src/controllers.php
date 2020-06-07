@@ -23,7 +23,9 @@ $app->get('/dodaj', function () use ($app) {
 });
 
 $app->get('/admin', function () use ($app) {
-    return 'Hello ADMIN';
+    $sql = "SELECT * FROM eko_przystanki WHERE id > ?";
+    $przystanki = $app['db']->fetchAll($sql, array((int) "0"));
+    return $app['twig']->render('admin.html.twig', array('przystanki' => $przystanki));
 });
 
 
