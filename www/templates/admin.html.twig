@@ -3,12 +3,10 @@
     <h1>Lista propozycji przystanków:</h1>
     <ul id="admin-przystanek-list" class="list-group">
     {% for przystanek in przystanki %}
-        <li class="list-group-item{% if przystanek.reviewed == false %} active{% endif %}">{{ przystanek.id|e }} - {{ przystanek.nazwa|e }}</li>
-    {% endfor %}        
-        <li class="list-group-item active">Cras justo odio</li>
-        <li class="list-group-item">Dapibus ac facilisis in</li>
-        <li class="list-group-item">Morbi leo risus</li>
-        <li class="list-group-item">Porta ac consectetur ac</li>
-        <li class="list-group-item">Vestibulum at eros</li>
+        <li class="list-group-item{% if przystanek.reviewed == false %} active{% endif %}">
+            {{ przystanek.id|e }} - {{ przystanek.nazwa|e }}
+            <button data-id="{{ przystanek.id }}" type="button" class="btn-more btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top"> Kliknij po więcej </button>
+        </li>
+    {% endfor %}
     </ul>
 {% endblock %}

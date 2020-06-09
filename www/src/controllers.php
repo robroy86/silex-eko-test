@@ -1,12 +1,8 @@
 <?php
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
-//Request::setTrustedProxies(array('127.0.0.1'));
+//AnnotationRegistry::registerLoader([$loader, 'loadClass']);
+use Przystanki\Przystanek;
+//$a = new Przystanek();
 
 $app->get('/', function () use ($app) {
     return $app['twig']->render('index.html.twig', array());
@@ -23,8 +19,11 @@ $app->get('/dodaj', function () use ($app) {
 });
 
 $app->get('/admin', function () use ($app) {
-    $sql = "SELECT * FROM eko_przystanki WHERE id > ?";
-    $przystanki = $app['db']->fetchAll($sql, array((int) "0"));
+    $przystanek = new Przystanek();
+    $przystanki = $przystanek->getPrzystankiNotReviewed();//Przystanek::
+    $js = ['admin.js'];
+    $app['twig']->addGlobal('js', $js);
+    //$app['twig']->addExtension($js);
     return $app['twig']->render('admin.html.twig', array('przystanki' => $przystanki));
 });
 

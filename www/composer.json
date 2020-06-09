@@ -22,10 +22,16 @@
         "symfony/translation": "~2.8|^3.0",
         "symfony/twig-bridge": "~2.8|^3.0",
         "symfony/validator": "~2.8|^3.0",
-		"doctrine/dbal": "~2.2"
+        "doctrine/dbal": "~2.2",
+        "twig/twig": "^2.12",
+        "dflydev/doctrine-orm-service-provider": "^2.0"
     },
     "autoload": {
-        "psr-0": { "": "src/" }
+        "psr-0": {
+		"": "src/",
+		"Przystanki\\Przystanek": "src/models/"
+
+         }
     },
     "extra": {
         "branch-alias": {

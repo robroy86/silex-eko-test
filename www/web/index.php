@@ -2,11 +2,25 @@
 // set the error handling
 ini_set('display_errors', 1);
 error_reporting(-1);
+// namespaces
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-// web/index.php
-require_once __DIR__.'/../vendor/autoload.php';
+use Silex\Provider\DoctrineServiceProvider;
+use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+
+// autoload
+$loader = require_once __DIR__.'/../vendor/autoload.php';
+$loader->add('Przystanki', __DIR__.'/../src/przystanki/');
+use Przystanki\Przystanek;
 
 $app = new Silex\Application();
+
+AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 
 require __DIR__.'/../config/prod.php';
 require __DIR__.'/../config/db.php';
