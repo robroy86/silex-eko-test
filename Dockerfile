@@ -1,6 +1,11 @@
 FROM ubuntu:xenial
 MAINTAINER romeOz <serggalka@gmail.com>
 
+WORKDIR /var/www/html/
+
+ADD www /var/www/html/
+COPY entrypoint.sh /sbin/entrypoint.sh
+
 ENV OS_LOCALE="pl_PL.UTF-8"
 RUN apt-get update && apt-get install -y locales && locale-gen ${OS_LOCALE}
 ENV LANG=${OS_LOCALE} \
@@ -9,11 +14,8 @@ ENV LANG=${OS_LOCALE} \
     DEBIAN_FRONTEND=noninteractive
 
 ENV APACHE_CONF_DIR=/etc/apache2 \
-    PHP_CONF_DIR=/etc/php/7.0 \
+    PHP_CONF_DIR=/etc/php/7.2 \
     PHP_DATA_DIR=/var/lib/php
-
-COPY ./www /var/www/html/
-COPY entrypoint.sh /sbin/entrypoint.sh
 
 RUN	\
 	BUILD_DEPS='software-properties-common python-software-properties' \
@@ -22,14 +24,14 @@ RUN	\
 	&& add-apt-repository -y ppa:ondrej/php \
 	&& add-apt-repository -y ppa:ondrej/apache2 \
 	&& apt-get update \
-    && apt-get install -y curl apache2 libapache2-mod-php7.0 php7.0-cli php7.0-readline php7.0-mbstring php7.0-zip php7.0-intl php7.0-xml php7.0-json php7.0-curl php7.0-mcrypt php7.0-gd php7.0-pgsql php7.0-mysql php-pear \
+    && apt-get install -y curl apache2 libapache2-mod-php7.2 php7.2-cli php7.2-readline php7.2-mbstring php7.2-zip php7.2-intl php7.2-xml php7.2-json php7.2-curl php7.1-mcrypt php7.2-gd php7.2-pgsql php7.2-mysql php-pear \
     # Kilka moich
 	&& apt-get install -y apt-utils \
 	&& apt-get install -y zip unzip \
 	# Apache settings
     && cp /dev/null ${APACHE_CONF_DIR}/conf-available/other-vhosts-access-log.conf \
     && rm ${APACHE_CONF_DIR}/sites-enabled/000-default.conf ${APACHE_CONF_DIR}/sites-available/000-default.conf \
-    && a2enmod rewrite php7.0 \
+    && a2enmod rewrite php7.2 \
     # PHP settings
 	&& phpenmod mcrypt \
 	# Install composer
@@ -47,8 +49,6 @@ RUN	\
 COPY ./configs/apache2.conf ${APACHE_CONF_DIR}/apache2.conf
 COPY ./configs/app.conf ${APACHE_CONF_DIR}/sites-enabled/app.conf
 COPY ./configs/php.ini  ${PHP_CONF_DIR}/apache2/conf.d/custom.ini
-
-WORKDIR /var/www/html/
 
 EXPOSE 80 443 3306
 
