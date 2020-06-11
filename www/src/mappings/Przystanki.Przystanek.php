@@ -1,31 +1,11 @@
 <?php
 
-$metadata->mapField(array(
-    'id' => true,
-    'fieldName' => 'id',
-    'type' => 'integer'
- ));
- 
- $metadata->mapField(array(
-    'fieldName' => 'username',
-    'type' => 'string',
-    'options' => array(
-        'fixed' => true,
-        'comment' => "User's login name"
-    )
- ));
- 
- $metadata->mapField(array(
-    'fieldName' => 'login_count',
-    'type' => 'integer',
-    'nullable' => false,
-    'options' => array(
-        'unsigned' => true,
-        'default' => 0
-    )
- ));
+/* eko_ przystanki  
+   comes in handy: https://www.doctrine-project.org/projects/doctrine-dbal/en/2.10/reference/types.html
+*/
 
  $metadata->mapField(array(
+    'id' => true,
     'fieldName' => 'id',
     'type' => 'integer',
     'nullable' => false,
@@ -33,33 +13,94 @@ $metadata->mapField(array(
         'unsigned' => true
     )
 ));
-  $metadata->mapField(array(
+
+$metadata->mapField(array(
     'fieldName' => 'nazwa',
-    'type' => '
-  $metadata->mapField(array(
+    'type' => 'string',
+    'nullable' => false,
+    'options' => array(
+      'default' => ''
+    )
+));
+
+$metadata->mapField(array(
     'fieldName' => 'adres',
-    'type' => '
-  $metadata->mapField(array(
+    'type' => 'string',
+    'nullable' => false,
+    'options' => array(
+      'default' => ''
+    )
+));
+
+$metadata->mapField(array(
     'fieldName' => 'opis',
-    'type' => '
-  $metadata->mapField(array(
+    'type' => 'text',
+    'nullable' => false,
+    'options' => array(
+      'default' => ''
+    )
+));
+
+$metadata->mapField(array(
     'fieldName' => 'zdj1',
-    'type' => '
-  $metadata->mapField(array(
+    'type' => 'string',
+    'nullable' => false,
+    'options' => array(
+      'default' => ''
+    )
+));
+
+$metadata->mapField(array(
     'fieldName' => 'zdj2',
-    'type' => '
-  $metadata->mapField(array(
+    'type' => 'string',
+    'nullable' => false,
+    'options' => array(
+      'default' => ''
+    )
+));
+
+$metadata->mapField(array(
     'fieldName' => 'zdj3',
-    'type' => '
-  $metadata->mapField(array(
+    'type' => 'string',
+    'nullable' => false,
+    'options' => array(
+      'default' => ''
+    )
+));
+
+$metadata->mapField(array(
     'fieldName' => 'reviewed',
-    'type' => '
-  $metadata->mapField(array(
+    'type' => 'boolean'
+    'nullable' => false,
+    'options' => array(
+      'default' => 0
+    )
+));
+
+$metadata->mapField(array(
     'fieldName' => 'ip',
-    'type' => '
-  $metadata->mapField(array(
+    'type' => 'string',
+    'nullable' => false,
+    'options' => array(
+      'default' => ''
+    )
+));
+
+$metadata->mapField(array(
     'fieldName' => 'browser',
-    'type' => '
-  $metadata->mapField(array(
+    'type' => 'string',
+    'nullable' => false,
+    'options' => array(
+      'default' => ''
+    )
+));
+
+$metadata->mapField(array(
     'fieldName' => 'data',
-    'type' => '
+    'type' => 'datetime',
+    'nullable' => false,
+    'options' => array(
+      'default' => 0
+    )
+));
+ 

@@ -24,7 +24,8 @@
         "symfony/validator": "~2.8|^3.0",
         "doctrine/dbal": "~2.2",
         "twig/twig": "^2.12",
-        "dflydev/doctrine-orm-service-provider": "^2.0"
+        "dflydev/doctrine-orm-service-provider": "^2.0",
+        "doctrine/persistence": "^2.0"
     },
     "autoload": {
         "psr-0": {

@@ -35,7 +35,6 @@ $app['db.builder'] = $app->factory(function () use ($app) {
   return new \Doctrine\DBAL\Query\QueryBuilder($app['db']);
 });
 
-/*
-$driver = new PHPDriver($baseDir . 'src/models/Przystanki');
+
+$driver = new PHPDriver($baseDir . 'src/mappings');
 $app['orm.em']->getConfiguration()->setMetadataDriverImpl($driver);
-*/
