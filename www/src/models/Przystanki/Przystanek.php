@@ -4,71 +4,90 @@ namespace Przystanki;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use \Doctrine\ORM\EntityManager;
-use \Doctrine\DBAL\Query\QueryBuilder as QB;
+use Doctrine\ORM\EntityManager;
+use Doctrine\DBAL\Query\QueryBuilder as QB;
 
-/**
- * @Entity
- * @Table(name="eko_przystanki")
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
+
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Mapping\Index;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Column;
+
+
+/** 
+ * @ORM\Entity()
+ * @ORM\Table(name="eko_przystanki", indexes={@ORM\Index(name="index_adres", columns={"adres"})},
+ *     uniqueConstraints={
+ *     @ORM\UniqueConstraint(
+ *         name="index_przystanki_unique_nazwa",
+ *         columns={"nazwa"}
+ *     )
+ * })
  */
-/**
- * Przystanek
- *
- * @ORM\Table(name="myDb.eko_przystanki", indexes={@ORM\Index(name="index_przystanki_unique_nazwa", columns={"nazwa"})})
- * @ORM\Entity
- */
+
 class Przystanek {
     /**
-     * @id
-     * @Column(type="integer")
-     * @GeneratedValue
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
     /**
-     * @nazwa
+     * @var string
+     * @ORM\Column(type="string",unique=true)
      */
     private $nazwa;
     /**
-     * @adres
+     * @var string
+     * @ORM\Column(type="string")
      */
     private $adres;
     /**
-     * @opis
-     * @Column(type="text")
+     * @var text
+     * @ORM\Column(type="text")
      */
     private $opis;
     /**
-     * @zdj1
+     * @var string
+     * @ORM\Column(type="string")
      */
     private $zdj1;
     /**
-     * @zdj2
+     * @var string
+     * @ORM\Column(type="string")
      */
     private $zdj2;
     /**
-     * @zdj3
+     * @var string
+     * @ORM\Column(type="string")
      */
     private $zdj3;
     /**
-     * @reviewed
-     * @Column(type="boolean")
+     * @var string
+     * @ORM\Column(type="boolean")
      */
     private $reviewed;
     /**
-     * @ip
+     * @var string
+     * @ORM\Column(type="string")
      */
     private $ip;
     /**
-     * @browser
+     * @var string
+     * @ORM\Column(type="string")
      */
     private $browser;
     /**
-     * @ip
-     * @Column(type="datetime")
+     * @var datetime
+     * @ORM\Column(type="datetime")
      */
     private $data;
 
-    public $entityManager;
+    //public $entityManager;
 
     function __construct($p = null) {
         if (is_int($p))
@@ -123,7 +142,7 @@ class Przystanek {
             ->setParameter('id', $id);
         $stm = $qb->execute();
         $przystanek = $stm->fetchAll();
-        //var_dump($przystanek);die();
+
         return $przystanek;
     }
 
@@ -148,12 +167,8 @@ class Przystanek {
         foreach ($data as $key => $val) {
             $this->__set($key, $val);
         }
-        var_dump($app['orm.em']->getRepository('Przystanek'));
-        die();
-        $app['orm.em']->persist($this);
-        $app['orm.em']->flush();
-        die();
-        $em = EntityManager::create($app['db'], $config);
-        die(' [ Q ] ');
+        $app['db.em']->persist($this);
+        $app['db.em']->flush();
+        return true;
     }
 }

@@ -3,6 +3,8 @@
 //AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 use Przystanki\Przystanek;
 //$a = new Przystanek();
+//var_dump($a);
+//die();
 
 $app->get('/', function () use ($app) {
     return $app['twig']->render('index.html.twig', array());
@@ -20,6 +22,20 @@ $app->get('/dodaj', function () use ($app) {
 
 $app->get('/admin', function () use ($app) {
     $przystanek = new Przystanek();
+        $p = [
+            'id' => null,
+            'nazwa' => 'ORM nazwa',
+            'adres' => 'dasd asdsadasd',
+            'opis' => ' asd asdasdasdasdas',
+            'zdj1' => 'zas1',
+            'zdj2' => 'zas2',
+            'zdj3' => 'zas3',
+            'reviewed' => 0,
+            'ip' => '1.2.3.4',
+            'browser' => 'headless',
+            'data' => new DateTime('now')
+        ];
+        var_dump($przystanek->save($p));
     $przystanki = $przystanek->getPrzystankiNotReviewed();//Przystanek::
     $js = ['admin.js'];
     $app['twig']->addGlobal('js', $js);
@@ -27,7 +43,7 @@ $app->get('/admin', function () use ($app) {
     return $app['twig']->render('admin.html.twig', array('przystanki' => $przystanki));
 });
 
-
+/*
 $app->error(function (\Exception $e, Request $request, $code) use ($app) {
     if ($app['debug']) {
 		echo "Pow Pow " . __FILE__;
@@ -44,3 +60,4 @@ $app->error(function (\Exception $e, Request $request, $code) use ($app) {
 
     return new Response($app['twig']->resolveTemplate($templates)->render(array('code' => $code)), $code);
 });
+*/

@@ -70,7 +70,7 @@ $metadata->mapField(array(
 
 $metadata->mapField(array(
     'fieldName' => 'reviewed',
-    'type' => 'boolean'
+    'type' => 'boolean',
     'nullable' => false,
     'options' => array(
       'default' => 0
