@@ -1,0 +1,14 @@
+{% include "dodaj.html.twig" %}
+{% block error %}
+    <h4>⚠️ Błędy przy dodawaniu przystanku</h4>
+    <p class="alert alert-danger">
+        Wystąpiły błędy, zobacz poniżej co poszło nie tak i popraw:
+    </p>
+    <ol>
+        {% for error in errors %}
+        <li>
+            ❌ {{ error|e }}
+        </li>
+    {% endfor %}
+    </ol>
+{% endblock %}

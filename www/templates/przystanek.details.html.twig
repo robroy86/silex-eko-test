@@ -1,0 +1,9 @@
+<div class="przystanek-details">
+    {% block content %}
+        <h6>{{ przystanek.adres }}</h6>
+        <p>📅 {{ przystanek.data }} ( 💻 {{ przystanek.ip }}) - 🌐 {{ przystanek.browser }}
+            <br><br>
+            {{ przystanek.opis }}
+        </p>
+    {% endblock %}
+</div>

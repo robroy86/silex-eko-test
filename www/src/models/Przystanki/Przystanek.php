@@ -10,6 +10,9 @@ use Doctrine\DBAL\Query\QueryBuilder as QB;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
+use Symfony\Component\Validator\Mapping\ClassMetadata as ValidatorMetaData;
+use Symfony\Component\Validator\Constraints as Assert;
+
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Index;
@@ -91,12 +94,35 @@ class Przystanek {
 
     function __construct($p = null) {
         if (is_int($p))
-            return $this->getPrzystanekById($p);
+            return $this->getPrzystanekById($p, true);
         elseif(is_array($p)) {
-            $this->save($p);
+            return $this->set($p);
         } else 
             return FALSE;
         //$this->entityManager = $this->getDoctrine()->getManager();//->getManager('Przystanek');
+    }
+
+    public static function loadValidatorMetadata(ValidatorMetaData $metadata) //ToDo how does this work?
+    {
+        $metadata->addPropertyConstraint('nazwa', new Assert\NotBlank(['message' => 'Nazwa nie może być pusta']));
+        $metadata->addPropertyConstraint('adres', new Assert\NotBlank(['message' => 'Adres nie może być pusty']));
+        /* TODO why is this not working as Expected (dbg: Internal Server Error it the only message)
+        $metadata->addPropertyConstraint('nazwa', new Assert\Length([
+            'min' => 2,
+            'max' => 255,
+            'minMessage' => 'Nazwa musi mieć minimum 2 znaki',
+            'maxMessage' => 'Nazwa nie może być dłuższa niż 255 znaków',
+            'allowEmptyString' => false,
+        ]));
+        
+        $metadata->addPropertyConstraint('adres', new Assert\Length([
+            'min' => 5,
+            'max' => 255,
+            'minMessage' => 'Adres musi mieć minimum 5 znaków',
+            'maxMessage' => 'Adres nie może być dłuższa niż 255 znaków',
+            'allowEmptyString' => false,
+        ]));
+        */
     }
 
     public function __set($property, $value) {
@@ -128,7 +154,7 @@ class Przystanek {
         return $przystanki;
     }
 
-    function getPrzystanekById(int $id) {
+    function getPrzystanekById(int $id, $load = false) {
         global $app;
 
         if (!$id)
@@ -142,8 +168,10 @@ class Przystanek {
             ->setParameter('id', $id);
         $stm = $qb->execute();
         $przystanek = $stm->fetchAll();
+        if ($load)
+            $this->set($przystanek[0]);
 
-        return $przystanek;
+        return $przystanek[0];
     }
 
     function setPrzystanekAsReviewedById(int $id) {
@@ -161,12 +189,21 @@ class Przystanek {
         return (int)$stm;
     }
 
-    function save(array $data) {
+    function set(array $data) {
         global $app;
 
         foreach ($data as $key => $val) {
             $this->__set($key, $val);
         }
+        return true;
+    }
+
+    function save(array $data) {
+        global $app;
+
+       //foreach ($data as $key => $val) {
+       //    $this->__set($key, $val);
+       //}
         $app['db.em']->persist($this);
         $app['db.em']->flush();
         return true;

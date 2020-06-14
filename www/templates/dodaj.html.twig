@@ -1,41 +1,51 @@
 {% extends "layout.html.twig" %}
 {% block content %}
     <h1>Dodaj przystanek</h1>
-    <form action="/dodaj">
+    {% if errors|length > 0 %}
+        <h4>⚠️ Błędy przy dodawaniu przystanku</h4>
+        <p class="alert alert-danger">
+            Wystąpiły błędy, zobacz poniżej co poszło nie tak i popraw:
+        </p>
+        <ol>
+            {% for error in errors %}
+            <li>
+                ❌ {{ error|e }}
+            </li>
+        {% endfor %}
+        </ol>
+    {% endif %}
+    <form action="/dodaj" method="post">
         <div class="form-group">
             <label for="przystanek">Zaproponuj przystanek</label>
-            <input type="text" class="form-control" id="przystanek" aria-describedby="Przystanek" placeholder="Nazwa przystanku" required>
+            <input type="text" class="form-control" id="przystanek" name="nazwa" aria-describedby="Przystanek" placeholder="Nazwa przystanku" required>
             <small id="przystanekHelp" class="form-text text-muted">Nazwa może być dodana tylko raz i nie może być zmieniona. Pole obowiązkowe</small>
         </div>
         <div class="form-group">
             <label for="adres">Adres przystanku</label>
-            <input type="text" class="form-control" id="adres" placeholder="Adres przystanku">
+            <input type="text" class="form-control" id="adres" name="adres" placeholder="Adres przystanku">
             <small id="przystanekHelp" class="form-text text-muted">Adres przystanku może być dodany tylko raz i nie może być zmieniony. Pole obowiązkowe</small>
         </div>
         <div class="form-group">
             <label for="opis">Opis przystanku</label>
-            <textarea class="form-control" id="opis" rows="4"></textarea>
-            <small id="przystanekHelp" class="form-text text-muted">Pole nieobowiązkowe</small>
-        </div>
-        <div class="form-group">
-            <label for="opis">Opis przystanku</label>
-            <textarea class="form-control" id="opis" rows="4"></textarea>
+            <textarea class="form-control" id="opis" name="opis" rows="4"></textarea>
             <small id="przystanekHelp" class="form-text text-muted">Pole nieobowiązkowe</small>
         </div>
         <h5>Załączniki</h5>
         <p>Możesz dołączyć maksymalnie 3 załączniki w poprularnych formatach graficznych takich jak: jpg, jpeg, png. Maksymanlny rozmiar 2MB.</p>
         <div class="form-group">
             <label for="zal1">Załącznik obrazu 1</label>
-            <input type="file" class="form-control-file" id="zal1" accept=".jpg,.jpeg,.png" max-size="2048">
+            <input type="file" class="form-control-file" id="zal1" name="zdj1" accept=".jpg,.jpeg,.png" max-size="2048">
         </div>
         <div class="form-group">
             <label for="zal2">Załącznik obrazu 2</label>
-            <input type="file" class="form-control-file" id="zal2" accept=".jpg,.jpeg,.png" max-size="2048">
+            <input type="file" class="form-control-file" id="zal2" name="zdj2" accept=".jpg,.jpeg,.png" max-size="2048">
         </div>
         <div class="form-group">
             <label for="zal3">Załącznik obrazu 3</label>
-            <input type="file" class="form-control-file" id="zal3" accept=".jpg,.jpeg,.png" max-size="2048">
+            <input type="file" class="form-control-file" id="zal3" name="zdj3" accept=".jpg,.jpeg,.png" max-size="2048">
         </div>
-        <button type="submit" class="btn btn-primary">Wyślij propozycję</button>
+        <button type="submit" name="wyslij" value="wyślij" class="btn btn-primary">Wyślij propozycję</button>
     </form>
+{% endblock %}
+{% block error %}
 {% endblock %}

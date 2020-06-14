@@ -3,7 +3,7 @@
 $dbParams = array(
   'driver'   => 'pdo_mysql',
   'dbname'   => 'myDb',
-  'host'     => '172.18.0.2', // this is my docker IP change to 'localhost' or '127.0.0.1'
+  'host'     => '172.18.0.3', // this is my docker IP change to 'localhost' or '127.0.0.1'
   'user'     => 'user',
   'password' => 'test'
 );

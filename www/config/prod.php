@@ -5,6 +5,8 @@
 //$app['twig.path'] = array(__DIR__.'/../templates');
 //$app['twig.options'] = array('cache' => __DIR__.'/../var/cache/twig');
 //twig
+use Symfony\Component\Validator\Constraints as Assert;
+use Silex\Provider\FormServiceProvider;
 
 $base_url = "./"; //"http://" . $_SERVER['SERVER_NAME'] . '/web';
 $app->register(new Silex\Provider\AssetServiceProvider(), array(
@@ -25,3 +27,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 $loader = new \Twig\Loader\FilesystemLoader('./../templates');
 $twig = new \Twig\Environment($loader);
 
+//load the validator class
+$app->register(new Silex\Provider\ValidatorServiceProvider());
+//load the form class
+$app->register(new FormServiceProvider());
