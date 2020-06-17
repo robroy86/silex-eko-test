@@ -140,6 +140,52 @@ class Przystanek {
     
         return FALSE;
     }
+    /**
+     * This is for Twig only - doesn't suppurt __get magic method
+     */
+    public function id() {
+        return $this->id;
+    }
+    
+    public function nazwa() {
+        return $this->nazwa;
+    }
+    
+    public function adres() {
+        return $this->adres;
+    }
+    
+    public function opis() {
+        return $this->opis;
+    }
+    
+    public function zdj1() {
+        return $this->zdj1;
+    }
+    
+    public function zdj2() {
+        return $this->zdj2;
+    }
+    
+    public function zdj3() {
+        return $this->zdj3;
+    }
+    
+    public function review() {
+        return $this->review;
+    }
+    
+    public function ip() {
+        return $this->ip;
+    }
+    
+    public function browser() {
+        return $this->browser;
+    }
+    
+    public function data() {
+        return $this->data;
+    }
 
     function getPrzystankiNotReviewed() {
         global $app;

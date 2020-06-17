@@ -1,9 +1,9 @@
-<div class="przystanek-details">
+<div class="bus-stop-details">
     {% block content %}
-        <h6>{{ przystanek.adres }}</h6>
-        <p>📅 {{ przystanek.data }} ( 💻 {{ przystanek.ip }}) - 🌐 {{ przystanek.browser }}
-            <br><br>
-            {{ przystanek.opis }}
+        <h4>{{ przystanek.nazwa }}</h4>
+        <p>📅 {{ przystanek.data }} ( 💻 {{ przystanek.ip }}) - 🌐 {{ przystanek.browser }}  🚏  {{ przystanek.adres }}
         </p>
+        <p>{{ przystanek.opis }}</p>
+        <button data-id="{{ przystanek.id }}" type="button" class="btn btn-dark btn-hide">Ukryj</button>
     {% endblock %}
 </div>

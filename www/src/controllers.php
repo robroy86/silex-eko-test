@@ -29,8 +29,11 @@ $przystanek = new Przystanek(1);
 $przystanek->setPrzystanekAsReviewedById(1);
 var_dump($przystanek->adres);
 
-if ($przystanek->adres)
-    return json_encode(['html' => $app['twig']->render('przystanek.details.html.twig', array('przystanek' => $przystanek))]);
+if ($przystanek->adres) {
+    //return json_encode(['html' => $app['twig']->render('przystanek.details.html.twig', array('przystanek' => $przystanek))]);
+    var_dump(['html' => $app['twig']->render('przystanek.details.html.twig', array('przystanek' => $przystanek))]);
+die('q');
+}
 */
 
 $app->get('/', function () use ($app) {
@@ -157,14 +160,14 @@ $app->post('/dodaj', function (Request $request) use ($app) {
     }
 });
 
-$app->post('/reviewe/reviewed', function (Request $request) use ($app) {
+$app->post('/admin/details', function (Request $request) use ($app) {
     $id = (int) $request->request->get('id');
     $przystanek = new Przystanek($id);
     $przystanek->setPrzystanekAsReviewedById($id);
     if ($przystanek->nazwa)
-        return json_encode(['html' => $app['twig']->render('przystanek.details.html.twig', array('przystanek' => $przystanek))]);
+        return $app->json(['html' => $app['twig']->render('przystanek.details.html.twig', array('przystanek' => $przystanek))]);
     else
-        return json_encode(['html' => false, 'id' => $id]);
+        return $app->json(json_encode(['html' => false, 'id' => $id]));
 });
 
 $app->error(function (\Exception $e, Request $request, $code) use ($app) {

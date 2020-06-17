@@ -3,3 +3,7 @@
     background-color: #2a64a2;
     border-color: #007bff;
 }
+
+.btn-more {
+    float: right;
+}

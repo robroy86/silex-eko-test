@@ -4,7 +4,7 @@
     <ul id="admin-przystanek-list" class="list-group">
     {% for przystanek in przystanki %}
         <li class="list-group-item{% if przystanek.reviewed == false %} active{% endif %}">
-            {{ przystanek.id|e }} - {{ przystanek.nazwa|e }}
+            {{ przystanek.id|e }} - {{ "% -10.10s"|format( przystanek.nazwa|e) }} &hellip;
             <button data-id="{{ przystanek.id }}" type="button" class="btn-more btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top"> Kliknij po więcej </button>
         </li>
     {% endfor %}
