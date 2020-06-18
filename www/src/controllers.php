@@ -46,8 +46,17 @@ $app->get('/hello/{name}', function ($name) use ($app) {
     return 'Hello '.$app->escape($name);
 });
 
-$app->get('/dodaj', function () use ($app) {
-    return $app['twig']->render('dodaj.html.twig', array('errors' => []));
+$app->get('/dodaj', function (Request $request) use ($app) {
+    $data = [
+        'nazwa' => ( !is_null($request->request->get('nazwa'))? $request->request->get('nazwa')  : ''),
+        'adres' => ( !is_null($request->request->get('adres'))? $request->request->get('adres')  : ''),
+        'opis'  => ( !is_null($request->request->get('opis')) ? $request->request->get('opis')   : ''),
+        'zdj1'  => ( !is_null($request->request->get('zdj1')) ? $request->request->get('zdj1')   : ''),
+        'zdj2'  => ( !is_null($request->request->get('zdj2')) ? $request->request->get('zdj2')   : ''),
+        'zdj3'  => ( !is_null($request->request->get('zdj3')) ? $request->request->get('zdj3')   : '')
+    ];
+
+    return $app['twig']->render('dodaj.html.twig', array('errors' => [], 'data' => $data));
 });
 
 $app->get('/admin', function () use ($app) {
@@ -82,23 +91,24 @@ $app->post('/dodaj', function (Request $request) use ($app) {
             'nazwa' => $request->request->get('nazwa'),
             'adres' => $request->request->get('adres'),
             'opis'  => $request->request->get('opis'),
-            'zdj1'  => $request->request->get('zdj1'),
-            'zdj2'  => $request->request->get('zdj2'),
-            'zdj3'  => $request->request->get('zdj3')
+            'zdj1'  => ( !empty($request->request->get('zdj1')) ? $request->request->get('zdj1')   : ''),
+            'zdj2'  => ( !empty($request->request->get('zdj2')) ? $request->request->get('zdj2')   : ''),
+            'zdj3'  => ( !empty($request->request->get('zdj3')) ? $request->request->get('zdj3')   : '')
         );
     } else {// some default data for when the form is displayed the first time
         $data = array(
-            'nazwa' => '',
-            'adres' => '',
-            'opis'  => '',
-            'zdj1'  => '',
-            'zdj2'  => '',
-            'zdj3'  => ''
+            'nazwa' => ( $request->request->get('nazwa') ? $request->request->get('nazwa')  : ''),
+            'adres' => ( $request->request->get('adres') ? $request->request->get('adres')  : ''),
+            'opis'  => ( $request->request->get('opis')  ? $request->request->get('opis')   : ''),
+            'zdj1'  => ( !empty($request->request->get('zdj1')) ? $request->request->get('zdj1')   : ''),
+            'zdj2'  => ( !empty($request->request->get('zdj2')) ? $request->request->get('zdj2')   : ''),
+            'zdj3'  => ( !empty($request->request->get('zdj3')) ? $request->request->get('zdj3')   : '')
         );
     }
+
     $data['data'] = new DateTime('now');
     $data['reviewed'] = 0;
-    //ToDo: check out this, because should be save while using doctrine YES ? MySQL injection possible?
+    //ToDo: check out this, because should be save while using doctri ne YES ? MySQL injection possible?
     $data['ip'] = $request->getClientIp();
     $data['browser'] = $request->headers->get('User-Agent');
     // just setup a fresh $przystanek object (remove the example data)
@@ -140,9 +150,17 @@ $app->post('/dodaj', function (Request $request) use ($app) {
         // $entityManager->persist($task);
         // $entityManager->flush();
         //$przystanek->save($przystanek);
-        if ($ans)
+        if ($ans) {
+              $files = [];
+            $files[] = $request->files->get('zdj1');
+            $files[] = $request->files->get('zdj2');
+            $files[] = $request->files->get('zdj3');
+            foreach ($files as $file) {
+                $file->move(__DIR__.'/../web/files', $file->getClientOriginalName());
+            }
+            var_dump('DB', $app['db']->lastInsertId());
             return $app['twig']->render('success.html.twig');
-        else
+        } else
             return $app['twig']->render('duplicate.html.twig');
     }/* else {
         //var_dump($form->getErrors(true));
@@ -156,7 +174,7 @@ $app->post('/dodaj', function (Request $request) use ($app) {
             //echo $error->getPropertyPath().' '.$error->getMessage()."\n";
             $err_str[] = $error->getMessage();
         }
-        return $app['twig']->render('dodaj.html.twig', array('errors' => $err_str));
+        return $app['twig']->render('dodaj.html.twig', ['errors' => $err_str, 'data' => $data]);
     }
 });
 
@@ -169,7 +187,7 @@ $app->post('/admin/details', function (Request $request) use ($app) {
     else
         return $app->json(json_encode(['html' => false, 'id' => $id]));
 });
-
+/* This is for production only - it messes up the debuging completly leaving you with an Internal Server Error (nothing more, nothing less)
 $app->error(function (\Exception $e, Request $request, $code) use ($app) {
     // 404.html, or 40x.html, or 4xx.html, or error.html
     $templates = array(
@@ -181,3 +199,4 @@ $app->error(function (\Exception $e, Request $request, $code) use ($app) {
 
     return new Response($app['twig']->resolveTemplate($templates)->render(array('code' => $code)), $code);
 });
+*/

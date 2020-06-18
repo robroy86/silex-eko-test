@@ -58,17 +58,17 @@ class Przystanek {
      * @var string
      * @ORM\Column(type="string")
      */
-    private $zdj1;
+    private $zdj1 = '';
     /**
      * @var string
      * @ORM\Column(type="string")
      */
-    private $zdj2;
+    private $zdj2 = '';
     /**
      * @var string
      * @ORM\Column(type="string")
      */
-    private $zdj3;
+    private $zdj3 = '';
     /**
      * @var string
      * @ORM\Column(type="boolean")
@@ -104,25 +104,72 @@ class Przystanek {
 
     public static function loadValidatorMetadata(ValidatorMetaData $metadata) //ToDo how does this work?
     {
-        $metadata->addPropertyConstraint('nazwa', new Assert\NotBlank(['message' => 'Nazwa nie może być pusta']));
-        $metadata->addPropertyConstraint('adres', new Assert\NotBlank(['message' => 'Adres nie może być pusty']));
-        /* TODO why is this not working as Expected (dbg: Internal Server Error it the only message)
+        //$metadata->addPropertyConstraint('nazwa', new Assert\NotBlank(['message' => 'Nazwa nie może być pusta']));
         $metadata->addPropertyConstraint('nazwa', new Assert\Length([
             'min' => 2,
             'max' => 255,
-            'minMessage' => 'Nazwa musi mieć minimum 2 znaki',
-            'maxMessage' => 'Nazwa nie może być dłuższa niż 255 znaków',
-            'allowEmptyString' => false,
+            'minMessage' => 'Nazwa musi mieć minimum {{ limit }} znaki',
+            'maxMessage' => 'Nazwa nie może być dłuższa niż {{ limit }} znaków',
         ]));
         
         $metadata->addPropertyConstraint('adres', new Assert\Length([
             'min' => 5,
             'max' => 255,
-            'minMessage' => 'Adres musi mieć minimum 5 znaków',
-            'maxMessage' => 'Adres nie może być dłuższa niż 255 znaków',
-            'allowEmptyString' => false,
+            'minMessage' => 'Adres musi mieć minimum {{ limit }} znaków',
+            'maxMessage' => 'Adres nie może być dłuższy niż {{ limit }} znaków',
         ]));
-        */
+
+        $metadata->addPropertyConstraint('zdj1', new Assert\Image([
+            'minWidth' => 100,
+            'maxWidth' => 1600,
+            'minHeight' => 100,
+            'maxHeight' => 1200,
+            'detectCorrupted' => true,
+            'corruptedMessage' => 'Wgrany plik zdjęcia 1 jest uszkodzony, wgraj inny lub spróbuj jeszcze raz skopiować z oryginalnego nośnika',
+            'mimeTypes' => ['image/png','image/jpeg'],
+            'minWidthMessage' => 'Obraz jest za mały ({{ width }}px). Wymagane minimum {{ min_width }}px szerokości',
+            'maxWidthMessage' => 'Obraz za duży ({{ width }}px). Dozwolone max {{ max_width }}px szerokości.',
+            'minHeightMessage' => 'Obraz jest za mały ({{ width }}px). Wymagane minimum {{ min_width }}px wysokości',
+            'maxHeightMessage' => 'Obraz za duży ({{ width }}px). Dozwolone max {{ max_width }}px wysokości.',
+            'maxSize'         => '2M',
+            'maxSizeMessage'  => 'Plik jest za duży ({{ size }} {{ suffix }}). Maksymalny rozmiar pliku wynosi {{ limit }} {{ suffix }}.',
+            'notFoundMessage' => 'Nie znaleziono zdjęcia 1'
+        ]));
+
+        $metadata->addPropertyConstraint('zdj2', new Assert\Image([
+            'minWidth' => 400,
+            'maxWidth' => 1600,
+            'minHeight' => 300,
+            'maxHeight' => 1200,
+            'detectCorrupted' => true,
+            'corruptedMessage' => 'Wgrany plik zdjęcia 2 jest uszkodzony, wgraj inny lub spróbuj jeszcze raz skopiować z oryginalnego nośnika',
+            'mimeTypes' => ['image/png','image/jpeg'],
+            'minWidthMessage' => 'Obraz jest za mały ({{ width }}px). Wymagane minimum {{ min_width }}px szerokości',
+            'maxWidthMessage' => 'Obraz za duży ({{ width }}px). Dozwolone max {{ max_width }}px szerokości.',
+            'minHeightMessage' => 'Obraz jest za mały ({{ width }}px). Wymagane minimum {{ min_width }}px wysokości',
+            'maxHeightMessage' => 'Obraz za duży ({{ width }}px). Dozwolone max {{ max_width }}px wysokości.',
+            'maxSize'         => '2M',
+            'maxSizeMessage'  => 'Plik jest za duży ({{ size }} {{ suffix }}). Maksymalny rozmiar pliku wynosi {{ limit }} {{ suffix }}.',
+            'notFoundMessage' => 'Nie znaleziono zdjęcia 2'
+        ]));
+
+        $metadata->addPropertyConstraint('zdj3', new Assert\Image([
+            'minWidth' => 400,
+            'maxWidth' => 1600,
+            'minHeight' => 300,
+            'maxHeight' => 1200,
+            'detectCorrupted' => true,
+            'corruptedMessage' => 'Wgrany plik zdjęcia 3 jest uszkodzony, wgraj inny lub spróbuj jeszcze raz skopiować z oryginalnego nośnika',
+            'mimeTypes' => ['image/png','image/jpeg'],
+            'minWidthMessage' => 'Obraz jest za mały ({{ width }}px). Wymagane minimum {{ min_width }}px szerokości',
+            'maxWidthMessage' => 'Obraz za duży ({{ width }}px). Dozwolone max {{ max_width }}px szerokości.',
+            'minHeightMessage' => 'Obraz jest za mały ({{ width }}px). Wymagane minimum {{ min_width }}px wysokości',
+            'maxHeightMessage' => 'Obraz za duży ({{ width }}px). Dozwolone max {{ max_width }}px wysokości.',
+            'maxSize'         => '2M',
+            'maxSizeMessage'  => 'Plik jest za duży ({{ size }} {{ suffix }}). Maksymalny rozmiar pliku wynosi {{ limit }} {{ suffix }}.',
+            'notFoundMessage' => 'Nie znaleziono zdjęcia 3'
+        ]));
+
     }
 
     public function __set($property, $value) {
