@@ -18,6 +18,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
+use Symfony\Component\String\Slugger\AsciiSlugger;
+
 $app->get('/', function () use ($app) {
     return $app['twig']->render('index.html.twig', array());
 })->bind('homepage');
@@ -71,9 +73,9 @@ $app->post('/dodaj', function (Request $request) use ($app) {
             'nazwa' => $request->request->get('nazwa'),
             'adres' => $request->request->get('adres'),
             'opis'  => $request->request->get('opis'),
-            'zdj1'  => ( !empty($request->files->get('zdj1')) ? $request->files->get('zdj1')->getClientOriginalName() : ''),
-            'zdj2'  => ( !empty($request->files->get('zdj2')) ? $request->files->get('zdj2')->getClientOriginalName() : ''),
-            'zdj3'  => ( !empty($request->files->get('zdj3')) ? $request->files->get('zdj3')->getClientOriginalName() : '')
+            'zdj1'  => ( !empty($request->files->get('zdj1')) ? $request->files->get('zdj1') : ''),
+            'zdj2'  => ( !empty($request->files->get('zdj2')) ? $request->files->get('zdj2') : ''),
+            'zdj3'  => ( !empty($request->files->get('zdj3')) ? $request->files->get('zdj3') : '')
         );
     } else {// some default data for when the form is displayed the first time
         $data = array(
@@ -99,8 +101,10 @@ $app->post('/dodaj', function (Request $request) use ($app) {
 
     if ($submitted && count($errors) == 0/*$form->isSubmitted() && $form->isValid() <=== TODO */) {
         // $form->getData() <- ToDO
-        var_dump($data);
-        die('Q');
+        // This seems like a little dirty hack ... (before I master the $form component linked with the entity) get the file names only without file object (other wise the validator screems 'File not found')
+        if ($data['zdj1']) $data['zdj1']->getClientOriginalName();
+        if ($data['zdj2']) $data['zdj2']->getClientOriginalName();
+        if ($data['zdj3']) $data['zdj3']->getClientOriginalName();
         $id = $przystanek->save($data);
         if ($id) {
             $file_main_upload_directory = __DIR__.'/../web/images/';
@@ -113,14 +117,25 @@ $app->post('/dodaj', function (Request $request) use ($app) {
             $files[] = $request->files->get('zdj1');
             $files[] = $request->files->get('zdj2');
             $files[] = $request->files->get('zdj3');
+            $file_names = [];
             if (count(array_filter($files,function($a) {return $a==null;}))!==3) {// If there is something uploaded...
-                foreach ($files as $file) {
+                $i = 1;
+                foreach ($files as &$file) {
+                    $file_names["zdj$i"] = '';
                     if ($file) {
                         if (!$app['filesystem']->exists($file_main_upload_directory . $id)) // Create the destination directory ToDO: learn the slug tool
                             $app['filesystem']->mkdir($file_main_upload_directory . $id, 0755);
+                        $file_extension = $file->guessExtension();
                         $file->move($file_main_upload_directory . $id, $file->getClientOriginalName());
+                        $slugger = new AsciiSlugger();//safety reasons, don't trust user input
+                        $slug_file_name = $slugger->slug($file->getClientOriginalName());
+                        $slug_file_name = $slug_file_name . '-' . uniqid() . '.' . $file_extension;
+                        $app['filesystem']->rename($file_main_upload_directory . $id . DIRECTORY_SEPARATOR . $file->getClientOriginalName(), $file_main_upload_directory . $id . DIRECTORY_SEPARATOR . $slug_file_name);
+                        $file_names["zdj$i"] = $slug_file_name;
                     }
+                    $i++;
                 }
+                $przystanek->saveNewImgFileNames($id, $file_names);
             }   
             return $app['twig']->render('success.html.twig');
         } else

@@ -298,4 +298,26 @@ class Przystanek {
         $app['db.em']->flush();
         return $this->id();
     }
+
+    function saveNewImgFileNames(int $id, array $data) {
+        global $app;
+
+        if (!$id)
+            return false;
+
+        $qb = new QB($app['db']);
+        $qb->update('eko_przystanki');
+
+        if ($data['zdj1']) 
+            $qb->set('zdj1', $qb->createNamedParameter($data['zdj1']));
+        if ($data['zdj2']) 
+            $qb->set('zdj2', $qb->createNamedParameter($data['zdj2']));
+        if ($data['zdj3'])
+            $qb->set('zdj3', $qb->createNamedParameter($data['zdj3']));
+
+        $qb->where('id = :id')
+            ->setParameter('id', $id);
+        $stm = $qb->execute();
+        return (int)$stm;
+    }
 }
