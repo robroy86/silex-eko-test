@@ -1,11 +1,7 @@
 <?php
 
-//AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 use Przystanki\Przystanek;
 
-//$a = new Przystanek();
-//var_dump($a);
-//die();
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,25 +18,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-//TO DO make Controller classes
-
-/* just for testing 
-$przystanek = new Przystanek(1);
-$przystanek->setPrzystanekAsReviewedById(1);
-var_dump($przystanek->adres);
-
-if ($przystanek->adres) {
-    //return json_encode(['html' => $app['twig']->render('przystanek.details.html.twig', array('przystanek' => $przystanek))]);
-    var_dump(['html' => $app['twig']->render('przystanek.details.html.twig', array('przystanek' => $przystanek))]);
-die('q');
-}
-*/
-
 $app->get('/', function () use ($app) {
     return $app['twig']->render('index.html.twig', array());
-})
-->bind('homepage')
-;
+})->bind('homepage');
 
 $app->get('/hello/{name}', function ($name) use ($app) {
     return 'Hello '.$app->escape($name);
@@ -48,12 +28,12 @@ $app->get('/hello/{name}', function ($name) use ($app) {
 
 $app->get('/dodaj', function (Request $request) use ($app) {
     $data = [
-        'nazwa' => ( !is_null($request->request->get('nazwa'))? $request->request->get('nazwa')  : ''),
-        'adres' => ( !is_null($request->request->get('adres'))? $request->request->get('adres')  : ''),
-        'opis'  => ( !is_null($request->request->get('opis')) ? $request->request->get('opis')   : ''),
-        'zdj1'  => ( !is_null($request->request->get('zdj1')) ? $request->request->get('zdj1')   : ''),
-        'zdj2'  => ( !is_null($request->request->get('zdj2')) ? $request->request->get('zdj2')   : ''),
-        'zdj3'  => ( !is_null($request->request->get('zdj3')) ? $request->request->get('zdj3')   : '')
+        'nazwa' => '',
+        'adres' => '',
+        'opis'  => '',
+        'zdj1'  => '',
+        'zdj2'  => '',
+        'zdj3'  => ''
     ];
 
     return $app['twig']->render('dodaj.html.twig', array('errors' => [], 'data' => $data));
@@ -91,18 +71,18 @@ $app->post('/dodaj', function (Request $request) use ($app) {
             'nazwa' => $request->request->get('nazwa'),
             'adres' => $request->request->get('adres'),
             'opis'  => $request->request->get('opis'),
-            'zdj1'  => ( !empty($request->request->get('zdj1')) ? $request->request->get('zdj1')   : ''),
-            'zdj2'  => ( !empty($request->request->get('zdj2')) ? $request->request->get('zdj2')   : ''),
-            'zdj3'  => ( !empty($request->request->get('zdj3')) ? $request->request->get('zdj3')   : '')
+            'zdj1'  => ( !empty($request->files->get('zdj1')) ? $request->files->get('zdj1')->getClientOriginalName() : ''),
+            'zdj2'  => ( !empty($request->files->get('zdj2')) ? $request->files->get('zdj2')->getClientOriginalName() : ''),
+            'zdj3'  => ( !empty($request->files->get('zdj3')) ? $request->files->get('zdj3')->getClientOriginalName() : '')
         );
     } else {// some default data for when the form is displayed the first time
         $data = array(
             'nazwa' => ( $request->request->get('nazwa') ? $request->request->get('nazwa')  : ''),
             'adres' => ( $request->request->get('adres') ? $request->request->get('adres')  : ''),
             'opis'  => ( $request->request->get('opis')  ? $request->request->get('opis')   : ''),
-            'zdj1'  => ( !empty($request->request->get('zdj1')) ? $request->request->get('zdj1')   : ''),
-            'zdj2'  => ( !empty($request->request->get('zdj2')) ? $request->request->get('zdj2')   : ''),
-            'zdj3'  => ( !empty($request->request->get('zdj3')) ? $request->request->get('zdj3')   : '')
+            'zdj1'  => '',
+            'zdj2'  => '',
+            'zdj3'  => '',
         );
     }
 
@@ -111,63 +91,42 @@ $app->post('/dodaj', function (Request $request) use ($app) {
     //ToDo: check out this, because should be save while using doctri ne YES ? MySQL injection possible?
     $data['ip'] = $request->getClientIp();
     $data['browser'] = $request->headers->get('User-Agent');
-    // just setup a fresh $przystanek object (remove the example data)
-    //var_dump($app['form.factory']);
-    //die();
     /*******************************************************
-     *  TODO: Use FORM symphony/form mig
-     * *****************************************************
-    $form = $app['form.factory']->createBuilder(FormType::class, $data/*, ['preserve_empty_strings' => true*//*)
-        ->add('nazwa', TextType::class, array(
-            'constraints' => array(new Assert\NotBlank(), new Assert\Length(array('min' => 5)))))
-        ->add('adres', TextType::class, array(
-            'constraints' => array(new Assert\NotBlank(), new Assert\Length(array('min' => 5)))))
-        ->add('opis', TextType::class)
-        ->add('zdj1', TextType::class)
-        ->add('zdj2', TextType::class)
-        ->add('zdj3', TextType::class)
-        ->add('wyslij', SubmitType::class, [
-            'label' => 'Wyślij propozycję'
-        ])
-        ->setMethod(Request::METHOD_POST)
-        ->getForm();
-//var_dump($form->createView());
-//die();
-    $form->handleRequest($request);
-    */
+     *  TODO: Use FORM symphony/form $app['form.factory']->createBuilder
+     * ****************************************************/
     $przystanek = new Przystanek($data);
     $errors = $app['validator']->validate($przystanek);
 
     if ($submitted && count($errors) == 0/*$form->isSubmitted() && $form->isValid() <=== TODO */) {
-        // $form->getData() holds the submitted values
-        // but, the original `$task` variable has also been updated
-        //$przystanek = $form->getData();
-        //$przystanek->set($data);
-        $ans = $przystanek->save($data);
-        // ... perform some action, such as saving the task to the database
-        // for example, if Task is a Doctrine entity, save it!
-        // $entityManager = $this->getDoctrine()->getManager();
-        // $entityManager->persist($task);
-        // $entityManager->flush();
-        //$przystanek->save($przystanek);
-        if ($ans) {
+        // $form->getData() <- ToDO
+        var_dump($data);
+        die('Q');
+        $id = $przystanek->save($data);
+        if ($id) {
+            $file_main_upload_directory = __DIR__.'/../web/images/';
+            if (!$app['filesystem']->exists($file_main_upload_directory)) {
+                $app['filesystem']->mkdir($file_main_upload_directory);
+            }
+            if (!$app['filesystem']->exists($file_main_upload_directory)) // Check & Create the upload directory if it does not exists
+                $app['filesystem']->mkdir($file_main_upload_directory, 0755);
               $files = [];
             $files[] = $request->files->get('zdj1');
             $files[] = $request->files->get('zdj2');
             $files[] = $request->files->get('zdj3');
-            foreach ($files as $file) {
-                $file->move(__DIR__.'/../web/files', $file->getClientOriginalName());
-            }
-            var_dump('DB', $app['db']->lastInsertId());
+            if (count(array_filter($files,function($a) {return $a==null;}))!==3) {// If there is something uploaded...
+                foreach ($files as $file) {
+                    if ($file) {
+                        if (!$app['filesystem']->exists($file_main_upload_directory . $id)) // Create the destination directory ToDO: learn the slug tool
+                            $app['filesystem']->mkdir($file_main_upload_directory . $id, 0755);
+                        $file->move($file_main_upload_directory . $id, $file->getClientOriginalName());
+                    }
+                }
+            }   
             return $app['twig']->render('success.html.twig');
         } else
             return $app['twig']->render('duplicate.html.twig');
-    }/* else {
-        //var_dump($form->getErrors(true));
-        var_dump($form->isSubmitted());
-        die('dupa');
     }
-    die(' [ /dodaj] END ');*/
+
     $err_str = [];
     if (count($errors) > 0) {
         foreach ($errors as $error) {

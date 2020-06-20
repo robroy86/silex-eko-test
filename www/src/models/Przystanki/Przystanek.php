@@ -294,11 +294,8 @@ class Przystanek {
     function save(array $data) {
         global $app;
 
-       //foreach ($data as $key => $val) {
-       //    $this->__set($key, $val);
-       //}
         $app['db.em']->persist($this);
         $app['db.em']->flush();
-        return true;
+        return $this->id();
     }
 }
