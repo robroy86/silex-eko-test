@@ -16,6 +16,7 @@ $( document ).ready(function() {
                     btn.after(data.html);
                 }
                 btn.hide();
+                $('#img'+id).carousel();
             },
             error: function() {
                 if ($('#admin-przystanek-list').length == 0)

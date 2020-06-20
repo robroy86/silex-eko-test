@@ -42,21 +42,27 @@ $app->get('/dodaj', function (Request $request) use ($app) {
 });
 
 $app->get('/admin', function () use ($app) {
+    if (0) { // just some testing
+        $przystanek = new Przystanek(7);
+        var_dump($przystanek->getImages());
+        die();
+        $przystanek = new Przystanek();
+        $p = [
+            'id' => null,
+            'nazwa' => 'ORM nazwa',
+            'adres' => 'dasd asdsadasd',
+            'opis' => ' asd asdasdasdasdas',
+            'zdj1' => 'zas1',
+            'zdj2' => 'zas2',
+            'zdj3' => 'zas3',
+            'reviewed' => 0,
+            'ip' => '1.2.3.4',
+            'browser' => 'headless',
+            'data' => new DateTime('now')
+        ];
+        var_dump($przystanek->save($p));
+    }
     $przystanek = new Przystanek();
-    //$p = [
-    //    'id' => null,
-    //    'nazwa' => 'ORM nazwa',
-    //    'adres' => 'dasd asdsadasd',
-    //    'opis' => ' asd asdasdasdasdas',
-    //    'zdj1' => 'zas1',
-    //    'zdj2' => 'zas2',
-    //    'zdj3' => 'zas3',
-    //    'reviewed' => 0,
-    //    'ip' => '1.2.3.4',
-    //    'browser' => 'headless',
-    //    'data' => new DateTime('now')
-    //];
-    //var_dump($przystanek->save($p));
     $przystanki = $przystanek->getPrzystankiNotReviewed();//Przystanek::
     $js = ['admin.js'];
     $app['twig']->addGlobal('js', $js);
@@ -156,8 +162,12 @@ $app->post('/admin/details', function (Request $request) use ($app) {
     $id = (int) $request->request->get('id');
     $przystanek = new Przystanek($id);
     $przystanek->setPrzystanekAsReviewedById($id);
+    $images = $przystanek->getImages();
+    if (!count($images))
+        $images = false;
+
     if ($przystanek->nazwa)
-        return $app->json(['html' => $app['twig']->render('przystanek.details.html.twig', array('przystanek' => $przystanek))]);
+        return $app->json(['html' => $app['twig']->render('przystanek.details.html.twig', array('przystanek' => $przystanek, 'id' => $id, 'images' => $images))]);
     else
         return $app->json(json_encode(['html' => false, 'id' => $id]));
 });

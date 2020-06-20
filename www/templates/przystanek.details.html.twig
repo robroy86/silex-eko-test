@@ -3,15 +3,12 @@
         <h4>{{ przystanek.nazwa }}</h4>
         <p>📅 {{ przystanek.data }} ( 💻 {{ przystanek.ip }}) - 🌐 {{ przystanek.browser }}  🚏  {{ przystanek.adres }}</p>
         <p>{{ przystanek.opis }}</p>
-            {% if przystanek.zdj1|length > 0 %}
-                <img class="img-fluid" src=".{{ asset( przystanek.id ~ '/' ~ przystanek.zdj1 , 'img') }}" />
-            {% endif %}
-            {% if przystanek.zdj2|length > 0 %}
-                <img class="img-fluid" src=".{{ asset( przystanek.id ~ '/' ~ przystanek.zdj2 , 'img') }}" />
-            {% endif %}
-            {% if przystanek.zdj3|length > 0 %}
-                <img class="img-fluid" src=".{{ asset( przystanek.id ~ '/' ~ przystanek.zdj3 , 'img') }}" />
-            {% endif %}
+        {% if images != false %}
+            <h5>📷 Fotografie przystanków</h5>
+            {% include 'images.html.twig' %}
+        {% else %}
+            <p class="alert alert-secondary" role="alert">🚫 Brak zdjęć wgranych przez użytkownika</p>
+        {% endif %}
         <button data-id="{{ przystanek.id }}" type="button" class="btn btn-dark btn-hide">Ukryj</button>
     {% endblock %}
 </div>

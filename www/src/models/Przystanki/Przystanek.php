@@ -320,4 +320,14 @@ class Przystanek {
         $stm = $qb->execute();
         return (int)$stm;
     }
+
+    function getImages() {
+        $images = [];
+        for($i = 1; $i < 4; $i++) {
+            $img = $this->__get('zdj' . $i);
+            if ($img !== '')
+                $images[] = $img;
+        }
+        return $images;
+    }
 }
