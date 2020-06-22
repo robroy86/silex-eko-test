@@ -1,6 +1,7 @@
 <?php
 
 use Przystanki\Przystanek;
+//use Geocoding\Geocoder;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,6 +22,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 $app->get('/', function () use ($app) {
+    //$geo = new Geocoder('dasd');
     return $app['twig']->render('index.html.twig', array());
 })->bind('homepage');
 

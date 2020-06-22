@@ -1,7 +1,7 @@
 <div class="bus-stop-details">
     {% block content %}
         <h4>{{ przystanek.nazwa }}</h4>
-        <p>📅 {{ przystanek.data }} ( 💻 {{ przystanek.ip }}) - 🌐 {{ przystanek.browser }}  🚏  {{ przystanek.adres }}</p>
+        <p>📅 <span class="badge badge-secondary">Data i godzina: </span> {{ przystanek.data }} ( 💻 <span class="badge badge-secondary">IP: </span> {{ przystanek.ip }}) - 🌐 <span class="badge badge-secondary">Przeglądarka: </span> {{ przystanek.browser }}  🚏 <span class="badge badge-secondary">Adres: </span> {{ przystanek.adres }}</p>
         <p>{{ przystanek.opis }}</p>
         {% if images != false %}
             <h5>📷 Fotografie przystanków</h5>

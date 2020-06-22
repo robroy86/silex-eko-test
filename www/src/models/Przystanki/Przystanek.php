@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 
 use Symfony\Component\Validator\Mapping\ClassMetadata as ValidatorMetaData;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Table;
@@ -40,9 +42,14 @@ class Przystanek {
      */
     private $id;
     /**
+     * @var bigint
+     * @ORM\Column(type="bigint",length=10,options={"default": 0, "unsigned":true})
+     */
+    private $id_user = 0;
+    /**
      * @var string
      * @ORM\Column(type="string",unique=true)
-     */
+     */    
     private $nazwa;
     /**
      * @var string
@@ -104,7 +111,11 @@ class Przystanek {
 
     public static function loadValidatorMetadata(ValidatorMetaData $metadata) //ToDo how does this work?
     {
-        //$metadata->addPropertyConstraint('nazwa', new Assert\NotBlank(['message' => 'Nazwa nie może być pusta']));
+        $metadata->addConstraint(new UniqueEntity([
+            'fields' => 'nazwa',
+            'message' => 'Ktoś już dodał ten przystanek przed Toba, przykro nam, ale przystanek można unikalnie dodać tylko raz.'
+        ]));
+
         $metadata->addPropertyConstraint('nazwa', new Assert\Length([
             'min' => 2,
             'max' => 255,
@@ -112,6 +123,7 @@ class Przystanek {
             'maxMessage' => 'Nazwa nie może być dłuższa niż {{ limit }} znaków',
         ]));
         
+        $metadata->addPropertyConstraint('adres', new NotBlank(['message' => 'Adres nie może być pusty']));
         $metadata->addPropertyConstraint('adres', new Assert\Length([
             'min' => 5,
             'max' => 255,
