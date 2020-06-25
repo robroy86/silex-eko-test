@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 
 use Symfony\Component\Validator\Mapping\ClassMetadata as ValidatorMetaData;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints as AssertDoctrine;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -32,9 +33,10 @@ use Doctrine\ORM\Mapping\Column;
  *         columns={"nazwa"}
  *     )
  * })
+ * @UniqueEntity("nazwa",service="doctrine.orm.validator.unique")
  */
 
-class Przystanek {
+class Przystanek extends UniqueEntity {
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -97,7 +99,7 @@ class Przystanek {
      */
     private $data;
 
-    //public $entityManager;
+    public $service = 'doctrine.orm.validator.unique';
 
     function __construct($p = null) {
         if (is_int($p))

@@ -19,10 +19,10 @@ use Silex\Provider\FormServiceProvider;
 // autoload
 $loader = require_once __DIR__.'/../vendor/autoload.php';
 //$loader->add('Przystanki', __DIR__.'/../src/przystanki/');
-$loader->add('Geocoding', __DIR__.'/../src/geocoding/');
+//$loader->add('Geocoding', __DIR__.'/../src/geocoding/');
 
 use Przystanki\Przystanek;
-//use Geocoding\Geocoder;
+use Geocoding\Geocoder;
 
 $app = new Silex\Application();
 

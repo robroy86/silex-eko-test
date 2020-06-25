@@ -4,7 +4,7 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=5.5.9",
+        "php": ">=7.2",
         "silex/silex": "*",
         "silex/web-profiler": "*",
         "symfony/asset": "*",
@@ -16,26 +16,32 @@
         "symfony/css-selector": "*",
         "symfony/debug": "*",
         "symfony/finder": "*",
-        "symfony/form": "<4.4.10",
         "symfony/monolog-bridge": "*",
         "symfony/process": "*",
         "symfony/security": "*",
-        "symfony/translation": "*",
+	"symfony/form": "<=3.5",
+        "symfony/translation": "<4.3.10",
         "symfony/twig-bridge": "*",
         "symfony/validator": "*",
+	"symfony/doctrine-bridge": "*",
         "doctrine/dbal": "*",
+	"doctrine/doctrine-bundle": "<=2.10",
         "twig/twig": "*",
         "dflydev/doctrine-orm-service-provider": "*",
         "doctrine/persistence": "*",
         "doctrine/orm": "*",
         "symfony/string": "*",
         "geocoder-php/locationiq-provider": "^1.0",
-        "php-http/guzzle6-adapter": "^2.0"
+        "php-http/guzzle6-adapter": "^2.0",
+        "saxulum/saxulum-doctrine-orm-manager-registry-provider": "^3.1",
+        "silex/providers": "^2.3",
+        "pimple/pimple": "^3.3"
     },
     "autoload": {
         "psr-0": {
 		"": "src/",
-		"Przystanki\\Przystanek": "src/models/"
+		"Przystanki\\Przystanek": "src/models/",
+		"Geocoding\\Geocoder":  "src/models/"
 
          }
     },

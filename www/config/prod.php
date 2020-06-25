@@ -24,6 +24,7 @@ $app['debug'] = TRUE;
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/../templates',
 ));
+
 $loader = new \Twig\Loader\FilesystemLoader('./../templates');
 $twig = new \Twig\Environment($loader);
 

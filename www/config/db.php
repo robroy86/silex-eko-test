@@ -59,3 +59,16 @@ $entitiesPath = array(__DIR__.'/../src/models/Przystanki');
 $config = Setup::createAnnotationMetadataConfiguration($entitiesPath, $app['debug'], null, null, false);
 $entityManager = EntityManager::create($dbParams, $config);
 $app['db.em'] = $entityManager;
+
+use Saxulum\DoctrineOrmManagerRegistry\Provider\DoctrineOrmManagerRegistryProvider;
+use Silex\Provider\ValidatorServiceProvider;
+
+$app->register(new ValidatorServiceProvider(), array(
+    'validator.validator_service_ids' => array(
+        'doctrine.orm.validator.unique' => 'doctrine.orm.validator.unique',
+    )
+));
+
+$app['doctrine.orm.validator.unique'] = $app->share(function (Application $app) {
+    return new Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntityValidator($app['doctrine']);
+});
